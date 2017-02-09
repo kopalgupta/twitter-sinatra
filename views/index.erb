@@ -1,0 +1,74 @@
+<h2>Hello! <%= user.name %> </h2>
+<h3 class="handle">@<%= user.handle %></h3>
+
+<form action="/add_tweet" method="POST">
+<textarea name="content" placeholder="My tweet"></textarea>
+<input type="submit" value="Tweet Now">
+</form>
+
+<ul>
+<% if tweets %>
+	<% tweets.each do |tweet| %>
+
+		<li>
+			<h5 class="handle">@<%= tweet.handle %>: </h5>
+			<h4 class="tweet"><%= tweet.content %></h4>
+
+			<% if tweet.user_id == user.id %>
+			<form action="/delete_tweet" method="POST">
+			<input type="hidden" name="delete" value="<%= tweet.id %>">
+			<input type="submit" value="Delete Tweet">
+			</form>
+			<% end %>
+
+			<% upvote_link = "/upvote/#{tweet.id}" %>
+			<a href=<%= upvote_link %>>Upvote</a>
+
+			<% upvotes_number = 0 %>
+			<% upvotes.each do |upvote| %>
+				<% if upvote.tweet_id == tweet.id %>
+					<% upvotes_number = upvotes_number + 1 %>
+				<% end %>
+			<% end %>
+			<%= upvotes_number %> Upvotes <br>
+
+			<% comment_link = "/comment/#{tweet.id}" %>
+			<form action=<%= comment_link %> method="POST">
+			<textarea name="content" placeholder="My comment..."></textarea>
+			<input type="submit" value="Add Comment">
+			</form>
+
+			<ul>
+			<% comments.each do |comment| %>
+				<% if comment.tweet_id == tweet.id %>
+					<li>
+					<p class="comments">@<%= comment.handle %>: <%= comment.content %></p>
+					</li>
+				<% end %>
+			<% end %>
+			</ul>
+
+		</li>
+
+	<% end %>
+<% end %>
+</ul>
+
+
+<form action="/logout" method="POST">
+<input type="submit" name="logout" value="Log Out" />
+</form>
+
+<style type="text/css">
+	.handle {
+		font-style: italic;
+	}
+	.tweet {
+		font-family: "Courier New", Courier, monospace;
+	}
+	p.comments {
+		font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+		font-size: 10px;
+	}
+</style>
+
