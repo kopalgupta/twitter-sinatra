@@ -11,7 +11,7 @@
 	<% tweets.each do |tweet| %>
 
 		<li>
-			<h5 class="handle">@<%= tweet.handle %>: </h5>
+			<h4 class="handle">@<%= tweet.handle %>: </h4>
 			<h4 class="tweet"><%= tweet.content %></h4>
 
 			<% if tweet.user_id == user.id %>
@@ -21,6 +21,7 @@
 			</form>
 			<% end %>
 
+			<div class="upvotes">
 			<% upvote_link = "/upvote/#{tweet.id}" %>
 			<a href=<%= upvote_link %>>Upvote</a>
 
@@ -30,7 +31,7 @@
 					<% upvotes_number = upvotes_number + 1 %>
 				<% end %>
 			<% end %>
-			<%= upvotes_number %> Upvotes <br>
+			<%= upvotes_number %> Upvotes </div>
 
 			<% comment_link = "/comment/#{tweet.id}" %>
 			<form action=<%= comment_link %> method="POST">
@@ -43,6 +44,12 @@
 				<% if comment.tweet_id == tweet.id %>
 					<li>
 					<p class="comments">@<%= comment.handle %>: <%= comment.content %></p>
+					<% if comment.user_id == user.id %>
+						<form action="/delete_comment" method="POST">
+						<input type="hidden" name="delete" value="<%= comment.id %>">
+						<input type="submit" value="Delete Comment">
+						</form>
+					<% end %>
 					</li>
 				<% end %>
 			<% end %>
@@ -65,10 +72,14 @@
 	}
 	.tweet {
 		font-family: "Courier New", Courier, monospace;
+		font-size: 25px;
 	}
 	p.comments {
 		font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
-		font-size: 10px;
+		font-size: 15px;
+	}
+	.upvotes {
+		font-size: 15px;
 	}
 </style>
 

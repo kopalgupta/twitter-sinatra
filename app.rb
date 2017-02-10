@@ -156,3 +156,9 @@ post '/comment/:tweet_id' do
 	comment.save
 	redirect '/'
 end
+
+post '/delete_comment' do 
+	comment = Comment.get(params[:delete])
+	comment.destroy
+	redirect '/'
+end
